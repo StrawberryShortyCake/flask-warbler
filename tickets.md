@@ -54,20 +54,8 @@ False if it can't find a user
     - appy.py show_following() method
     - appy.py show_followers() method
 
-10. Complete profile() method in app.py
-    - need authorization
-    - need to show detail.jinja
 
-11. For profile() method in app.py, there are...
-    - GET : which will be called on users/detail.jinja, but will render the
-          /users/edit.jinja template with form (so pass in the form)
-    - POST : which will be called on users/edit.jinja, and will process the form
-          input
-    - Possibly rename this method
-
-12. delete_user() method in app.py needs a flash message for successful logout
-
-13. Add data to show.jinja
+10-A. Add data to show.jinja
     - user location
     - user bio
     - user header_image
@@ -78,6 +66,22 @@ False if it can't find a user
                    class="card-hero">
             </div>
         ```
+
+10-B. Complete profile() method in app.py
+    - need authorization
+    - need to show detail.jinja
+
+
+11. For profile() method in app.py, there are...
+    - GET : which will be called on users/detail.jinja, but will render the
+          /users/edit.jinja template with form (so pass in the form)
+    - POST : which will be called on users/edit.jinja, and will process the form
+          input
+    - Possibly rename this method
+
+12. delete_user() method in app.py needs a flash message for successful logout
+
+
 
 14. Show the bio for users/
     - followers.jinja
