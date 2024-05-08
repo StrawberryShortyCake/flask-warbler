@@ -38,12 +38,12 @@ class UserUpdateForm(FlaskForm):
 
     username = StringField(
         'Username',
-        validators=[InputRequired(), Length(max=30)],
+        validators=[Optional(), Length(max=30)],
     )
 
     email = StringField(
         'E-mail',
-        validators=[InputRequired(), Email(), Length(max=50)],
+        validators=[Optional(), Email(), Length(max=50)],
     )
 
     password = PasswordField(
@@ -57,17 +57,17 @@ class UserUpdateForm(FlaskForm):
     )
 
     location = StringField(
-        'Location',
+        '(Optional) Location',
         validators=[Optional(), Length(max=30)]
     )
 
     bio = StringField(
-        'Bio',
+        '(Optional) Bio',
         validators=[Optional()]
     )
 
     header_image_url = StringField(
-        'Header Image URL',
+        '(Optional) Header Image URL',
         validators=[Optional(), URL()]
     )
 
