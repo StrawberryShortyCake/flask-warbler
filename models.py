@@ -23,10 +23,12 @@ class Follow(db.Model):
 
     __tablename__ = 'follows'
 
+    # Adds constraint: Does not allow you to follow yourself or a non-existent user
     __table_args__ = (
         db.UniqueConstraint("user_being_followed_id", "user_following_id"),
     )
 
+    # Ex: who is the user following following? Andrea, Zach, Joel
     user_being_followed_id = db.mapped_column(
         db.Integer,
         db.ForeignKey('users.id', ondelete="cascade"),
@@ -34,6 +36,7 @@ class Follow(db.Model):
         nullable=False,
     )
 
+    # The user doing the following -> USER followed Andrea
     user_following_id = db.mapped_column(
         db.Integer,
         db.ForeignKey('users.id', ondelete="cascade"),
@@ -41,12 +44,14 @@ class Follow(db.Model):
         nullable=False,
     )
 
+    # Ex: who is the user following following? Andrea, Zach, Joel
     followed_user = db.relationship(
         "User",
         foreign_keys=[user_following_id],
         back_populates="followers_users",
     )
 
+    # The user doing the following -> USER followed Andrea
     following_user = db.relationship(
         "User",
         foreign_keys=[user_being_followed_id],
@@ -112,6 +117,7 @@ class User(db.Model):
         cascade="all, delete-orphan",
     )
 
+    # The users that the User is following.
     following_users = db.relationship(
         "Follow",
         foreign_keys=[Follow.user_following_id],
@@ -119,6 +125,7 @@ class User(db.Model):
         cascade="all, delete-orphan",
     )
 
+    # All the users that follow the User.
     followers_users = db.relationship(
         "Follow",
         foreign_keys=[Follow.user_being_followed_id],
@@ -128,10 +135,12 @@ class User(db.Model):
 
     @property
     def following(self):
+        """ Return a list of everyone the User follows """
         return [follow.following_user for follow in self.following_users]
 
     @property
     def followers(self):
+        """ Return a list of all the followers the User has """
         return [follow.followed_user for follow in self.followers_users]
 
     def __repr__(self):
