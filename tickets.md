@@ -1,6 +1,7 @@
 # User
 
-1. fix signup class method to raise IntegrityError for not a unique username or email
+1. DONE A DB THROWS AN INTEGRITY ERROR AND WE ALREADY CAUGHT:
+- fix signup class method to raise IntegrityError for not a unique username or email
 
 2. Fix logout route in app.py (view function)
     - Explore if g.user is a global user and we can use that to log out
@@ -11,6 +12,11 @@
     - here is the solution in show.jinja from Flask-notes
 
     - Can't be an anchor tag
+
+    -Set up the csrf form on forms.py
+    - set the csrf_form globally on the g.object
+    - use it correctly in the base.jinja
+    - I believe the g.csrf_form needs to be set in the before_request
 
     ``` html
     <form>
@@ -97,6 +103,10 @@ False if it can't find a user
 16. Fix homepage()
     The homepage for logged-in-users should show the last 100 warbles only from the users that the logged-in user is following, and that user, rather than warbles from all users.
 
+
+## Questions
+- Why not an email field for our signup form?
+- How do we get more details from our Integrity Error? we want to see "username" vs "email"
 
 ## Further Studies
 - Add labels to all forms
