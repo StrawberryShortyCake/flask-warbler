@@ -98,5 +98,10 @@ False if it can't find a user
     The homepage for logged-in-users should show the last 100 warbles only from the users that the logged-in user is following, and that user, rather than warbles from all users.
 
 
+## Further Studies
+- Add labels to all forms
+    - users/signup.jinja
+
+
 
 
