@@ -127,7 +127,7 @@ def logout():
     form = g.csrf_form
 
     if form.validate_on_submit():
-        do_logout
+        do_logout()
         return redirect("/login")
 
     else:  # pragma: no cover
