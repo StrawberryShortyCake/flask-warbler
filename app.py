@@ -248,7 +248,7 @@ def profile_update():
         return redirect("/")
 
     if form.validate_on_submit():
-
+        # Set global user variable properties to user input, if available
         g.user.email = form.email.data or g.user.email
         g.user.username = form.username.data or g.user.username
         g.user.image_url = form.image_url.data or g.user.image_url
