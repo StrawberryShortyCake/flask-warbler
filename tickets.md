@@ -38,7 +38,7 @@
 4.** DONE IN USER SIGN UP METHOD ALREADY:
 signup() method in app.py needs to add the user into the db in the if
 
-5. login() method, when calling User.authenticate(), we need to specify the
+5. DONE: login() method, when calling User.authenticate(), we need to specify the
 named param arguments (username, password). User.authenticate() will pass back
 False if it can't find a user
 
@@ -55,10 +55,10 @@ False if it can't find a user
     - appy.py show_followers() method
 
 
-10-A. Add data to show.jinja
-    - user location
-    - user bio
-    - user header_image
+10-A WIP. Add data to show.jinja
+    - DONE: user location
+    - DONE: user bio
+    - FIXME: this needs to dynamically change correctly: user header_image
         ``` html taken from /user/index.jinja
             <div class="image-wrapper">
               <img src="{{ user.header_image_url }}"
@@ -67,19 +67,19 @@ False if it can't find a user
             </div>
         ```
 
-10-B. Complete profile() method in app.py
+10-B. DONE: Complete profile_update() method in app.py
     - need authorization
-    - need to show detail.jinja
+    - need to show edit.jinja
 
 
-11. For profile() method in app.py, there are...
+11. DONE: For profile_update() method in app.py, there are...
     - GET : which will be called on users/detail.jinja, but will render the
           /users/edit.jinja template with form (so pass in the form)
     - POST : which will be called on users/edit.jinja, and will process the form
           input
     - Possibly rename this method
 
-12. delete_user() method in app.py needs a flash message for successful logout
+12. DONE: delete_user() method in app.py needs a flash message for successful logout
 
 
 
@@ -114,6 +114,8 @@ False if it can't find a user
 ## Further Studies
 - Add labels to all forms
     - users/signup.jinja
+
+- added a password verification before deleting profile
 
 
 
