@@ -109,6 +109,7 @@ False if it can't find a user
 ## Questions
 - Why not an email field for our signup form?
 - How do we get more details from our Integrity Error? we want to see "username" vs "email"
+- How would we prepopulate the edit page?
 
 ## Further Studies
 - Add labels to all forms
