@@ -106,8 +106,8 @@ def login():
 
     if form.validate_on_submit():
         user = User.authenticate(
-            form.username.data,
-            form.password.data,
+            username=form.username.data,
+            password=form.password.data,
         )
 
         if user:
