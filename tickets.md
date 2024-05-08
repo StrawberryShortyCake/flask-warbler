@@ -47,12 +47,10 @@ False if it can't find a user
     - /users/following.jinja
     - /users/followers.jinja
 
-7. Need {{ form.hidden_tag() }} for the forms with button
-    - /users/following.jinja (2)
-    - /users/followers.jinja (2)
-    - /users/detail/jinja (3)
+7. DONE: Need {{ form.hidden_tag() }} for the forms with method POST
 
-9. Need to pass in the CSRF form
+9. DONE, we used a g.object to pass it into the jinja instead
+    Need to pass in the CSRF form
     - appy.py show_following() method
     - appy.py show_followers() method
 
