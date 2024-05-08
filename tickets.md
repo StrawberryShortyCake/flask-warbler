@@ -38,11 +38,11 @@
 4.** DONE IN USER SIGN UP METHOD ALREADY:
 signup() method in app.py needs to add the user into the db in the if
 
-5. DONE login() method, when calling User.authenticate(), we need to specify the
+5. login() method, when calling User.authenticate(), we need to specify the
 named param arguments (username, password). User.authenticate() will pass back
 False if it can't find a user
 
-6. Need an image alt for users header image
+6. DONE: Need an image alt for users header image
     - /users/index.jinja
     - /users/following.jinja
     - /users/followers.jinja
