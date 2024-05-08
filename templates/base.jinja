@@ -55,7 +55,19 @@
           </a>
         </li>
         <li><a href="/messages/new">New Message</a></li>
-        <li><a href="/logout">Log out</a></li>
+        <li>
+          <form>
+
+            {# Does this work correctly? #}
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+            <button class="btn btn-danger btn-sm"
+                    formaction="/logout"
+                    formmethod="POST">
+              Logout
+            </button>
+          </form>
+        </li>
       {% endif %}
 
     </ul>

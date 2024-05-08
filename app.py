@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
+from werkzeug.exceptions import Unauthorized
 
 from forms import UserAddForm, LoginForm, MessageForm
 from models import db, dbx, User, Message
@@ -118,8 +119,13 @@ def logout():
 
     form = g.csrf_form
 
-    # IMPLEMENT THIS AND FIX BUG
-    # DO NOT CHANGE METHOD ON ROUTE
+    if form.validate_on_submit():
+        do_logout
+        return redirect("/login")
+
+    else: # pragma: no cover
+        # didn't pass CSRF; ignore logout attempt
+        raise Unauthorized()
 
 
 ##############################################################################
