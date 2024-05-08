@@ -6,7 +6,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from werkzeug.exceptions import Unauthorized
 
-from forms import UserAddForm, LoginForm, MessageForm
+from forms import UserAddForm, LoginForm, MessageForm, CsrfForm
 from models import db, dbx, User, Message
 
 load_dotenv()
@@ -38,6 +38,13 @@ def add_user_to_g():
 
     else:
         g.user = None
+
+
+@app.before_request
+def add_csrf_to_g():
+    """ Add csrf before a request. """
+
+    g.csrf_form = CsrfForm()
 
 
 def do_login(user):
@@ -123,7 +130,7 @@ def logout():
         do_logout
         return redirect("/login")
 
-    else: # pragma: no cover
+    else:  # pragma: no cover
         # didn't pass CSRF; ignore logout attempt
         raise Unauthorized()
 

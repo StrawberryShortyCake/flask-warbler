@@ -3,17 +3,17 @@
 1. DONE A DB THROWS AN INTEGRITY ERROR AND WE ALREADY CAUGHT:
 - fix signup class method to raise IntegrityError for not a unique username or email
 
-2. Fix logout route in app.py (view function)
+2. DONE Fix logout route in app.py (view function)
     - Explore if g.user is a global user and we can use that to log out
     - flash logout success message
     - redirect back to login page
 
-3. Fix logout button in nav bar
+3. DONE Fix logout button in nav bar
     - here is the solution in show.jinja from Flask-notes
 
     - Can't be an anchor tag
 
-    -Set up the csrf form on forms.py
+    - Set up the csrf form on forms.py
     - set the csrf_form globally on the g.object
     - use it correctly in the base.jinja
     - I believe the g.csrf_form needs to be set in the before_request
