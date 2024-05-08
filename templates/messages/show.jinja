@@ -10,7 +10,7 @@
 
         <a href="{{ url_for('show_user', user_id=message.user.id) }}">
           <img src="{{ message.user.image_url }}"
-               alt=""
+               alt="Image for {{ message.user.username }}"
                class="timeline-image">
         </a>
 
