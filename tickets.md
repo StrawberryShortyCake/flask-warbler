@@ -63,3 +63,40 @@ False if it can't find a user
 
 12. delete_user() method in app.py needs a flash message for successful logout
 
+13. Add data to show.jinja
+    - user location
+    - user bio
+    - user header_image
+        ``` html taken from /user/index.jinja
+            <div class="image-wrapper">
+              <img src="{{ user.header_image_url }}"
+                   alt=""
+                   class="card-hero">
+            </div>
+        ```
+
+14. Show the bio for users/
+    - followers.jinja
+    - following.jinja
+    - list-users pages? index.jinja I believe.
+
+15. Make a WTForm for editting the profile
+    - username
+    - email
+    - image_url
+    - header_image_url
+    - bio
+
+    Have a password protection for edits, does not change the password.
+    - password
+        - Can only edit profile if we enter the correct password
+            - if not flash error and repopulate the form
+
+    Redirect to user/detail.jinja
+
+16. Fix homepage()
+    The homepage for logged-in-users should show the last 100 warbles only from the users that the logged-in user is following, and that user, rather than warbles from all users.
+
+
+
+
