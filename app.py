@@ -249,14 +249,15 @@ def profile_update():
 
     if form.validate_on_submit():
 
-        g.user.email = form.email.data
-        g.user.username = form.username.data
-        g.user.image_url = form.image_url.data
-        g.user.header_image_url = form.header_image_url.data
-        g.user.bio = form.bio.data
-        g.user.location = form.location.data
+        g.user.email = form.email.data or g.user.email
+        g.user.username = form.username.data or g.user.username
+        g.user.image_url = form.image_url.data or g.user.image_url
+        g.user.header_image_url = form.header_image_url.data or g.user.header_image_url
+        g.user.bio = form.bio.data or g.user.bio
+        g.user.location = form.location.data or g.user.location
 
         db.session.commit()
+        flash("Editted your account successfully.", "success")
 
         return redirect(f"/users/{g.user.id}")
 
