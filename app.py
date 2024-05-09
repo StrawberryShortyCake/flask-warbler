@@ -127,7 +127,7 @@ def logout():
 
     form = g.csrf_form
 
-    if form.validate_on_submit():
+    if form.validate_on_submit():  # NOTE: CSRF check, logging out once ok. Multi-logout is allowed, good UX
         do_logout()
         return redirect("/login")
 
@@ -242,7 +242,7 @@ def stop_following(follow_id):
 def profile_update():
     """Update profile for current user."""
 
-    form = UserUpdateForm(obj=g.user)
+    form = UserUpdateForm(obj=g.user)  # FIXME: move it under security check
 
     if not g.user:
         flash("Access unauthorized.", "danger")
@@ -250,7 +250,7 @@ def profile_update():
 
     if form.validate_on_submit():
 
-        is_auth = User.authenticate(
+        is_auth = User.authenticate(  # FIXME: improve naming b/c it's not a boolean output OR make it a boolean output
             username=g.user.username,
             password=form.password.data
         )
@@ -258,17 +258,20 @@ def profile_update():
         if is_auth:
 
             try:
-                user = db.get_or_404(User, g.user.id)
+                # user = db.get_or_404(User, g.user.id)
+
+                user = g.user
 
                 user.email = form.email.data
                 user.username = form.username.data
                 user.image_url = form.image_url.data or DEFAULT_IMAGE_URL
+                # FIXME: line break
                 user.header_image_url = form.header_image_url.data or DEFAULT_HEADER_IMAGE_URL
                 user.bio = form.bio.data
                 user.location = form.location.data
 
                 db.session.commit()
-                flash("Editted your account successfully.", "success")
+                flash("Edited your account successfully.", "success")
             except IntegrityError:
                 flash("User email / username already taken", "danger")
                 db.session.rollback()
@@ -383,7 +386,7 @@ def homepage():
         followers = [
             follower.id for follower in g.user.following]
 
-        # Add current use to the followers list
+        # Add current user to the followers list
         followers.append(g.user.id)
 
         q = (
