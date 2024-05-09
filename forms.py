@@ -52,11 +52,13 @@ class UserUpdateForm(FlaskForm):
 
     username = StringField(
         'Username',
+        # TODO: check if username is taken by a different user id
         validators=[Optional(), Length(max=30)],
     )
 
     email = StringField(
         'E-mail',
+        # TODO: check back in on the EmailField vs. StringField
         validators=[Optional(), Email(), Length(max=50)],
     )
 
@@ -75,7 +77,7 @@ class UserUpdateForm(FlaskForm):
         validators=[Optional(), Length(max=30)]
     )
 
-    bio = StringField(
+    bio = StringField(  # FIXME: textareafield
         '(Optional) Bio',
         validators=[Optional()]
     )
