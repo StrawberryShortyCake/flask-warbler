@@ -361,6 +361,9 @@ def homepage():
         followers = [
             follower.id for follower in g.user.following]
 
+        # Add current use to the followers list
+        followers.append(g.user.id)
+
         q = (
             db.select(Message)
             .where(Message.user_id.in_(followers))
