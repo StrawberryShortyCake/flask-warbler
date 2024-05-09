@@ -258,7 +258,6 @@ def profile_update():
         if is_auth:
 
             try:
-                # Set global user variable properties to user input, if available
                 user = db.get_or_404(User, g.user.id)
 
                 user.email = form.email.data
