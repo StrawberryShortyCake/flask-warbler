@@ -83,12 +83,12 @@ False if it can't find a user
 
 
 
-14. Show the bio for users/
+14. DONE: Show the bio for users/
     - followers.jinja
     - following.jinja
     - list-users pages? index.jinja I believe.
 
-15. Make a WTForm for editting the profile
+15. DONE: Make a WTForm for editting the profile
     - username
     - email
     - image_url
@@ -102,7 +102,7 @@ False if it can't find a user
 
     Redirect to user/detail.jinja
 
-16. Fix homepage()
+16. DONE: Fix homepage()
     The homepage for logged-in-users should show the last 100 warbles only from the users that the logged-in user is following, and that user, rather than warbles from all users.
 
 
@@ -116,6 +116,8 @@ False if it can't find a user
     - users/signup.jinja
 
 - added a password verification before deleting profile
+
+- add UI for showing /users
 
 
 

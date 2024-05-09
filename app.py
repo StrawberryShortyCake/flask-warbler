@@ -357,8 +357,13 @@ def homepage():
     """
 
     if g.user:
+
+        followers = [
+            follower.id for follower in g.user.following]
+
         q = (
             db.select(Message)
+            .where(Message.user_id.in_(followers))
             .order_by(Message.timestamp.desc())
             .limit(100)
         )
