@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from werkzeug.exceptions import Unauthorized
 
 from forms import UserAddForm, UserUpdateForm, LoginForm, MessageForm, CsrfForm
-from models import db, dbx, User, Message
+from models import db, dbx, User, Message, DEFAULT_HEADER_IMAGE_URL, DEFAULT_IMAGE_URL
 
 load_dotenv()
 
@@ -241,7 +241,7 @@ def stop_following(follow_id):
 def profile_update():
     """Update profile for current user."""
 
-    form = UserUpdateForm()
+    form = UserUpdateForm(obj=g.user)
 
     if not g.user:
         flash("Access unauthorized.", "danger")
@@ -256,15 +256,23 @@ def profile_update():
 
         if is_auth:
             # Set global user variable properties to user input, if available
-            g.user.email = form.email.data or g.user.email
-            g.user.username = form.username.data or g.user.username
-            g.user.image_url = form.image_url.data or g.user.image_url
-            g.user.header_image_url = form.header_image_url.data or g.user.header_image_url
-            g.user.bio = form.bio.data or g.user.bio
-            g.user.location = form.location.data or g.user.location
+            g.user.email = form.email.data
+            g.user.username = form.username.data
+            g.user.image_url = form.image_url.data or DEFAULT_IMAGE_URL
+            g.user.header_image_url = form.header_image_url.data or DEFAULT_HEADER_IMAGE_URL
+            g.user.bio = form.bio.data
+            g.user.location = form.location.data
 
-            db.session.commit()
-            flash("Editted your account successfully.", "success")
+            try:
+                db.session.commit()
+                flash("Editted your account successfully.", "success")
+            except IntegrityError:
+                flash("Must have a valid username and email.")
+                return render_template(
+                    "/users/edit.jinja",
+                    user=g.user,
+                    form=form,
+                )
 
             return redirect(f"/users/{g.user.id}")
 
