@@ -372,7 +372,35 @@ def delete_message(message_id):
 ##############################################################################
 # Likes
 
+@app.post('/messages/like/<int:message_id>')
+def toggle_like(message_id):
+    """ Will call is_liked method from the User model. Depending on
+    the output, will either call the liked or the unlike method and then
+    render the appropriate jinja
+    """
 
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    # Will return true if the message is liked; false otherwise
+    if g.user.is_liked(message_id):
+
+        redirection_url = request.form.get(
+            "came_from", "/")  # FIXME: add to jinja property in the hidden (like csrf)
+
+        g.user.like(
+            message_id=message_id,
+            user_id=g.user.id
+        )
+
+        db.session.commit()
+        return redirect(redirection_url)
+
+    else:
+
+        g.user.unlike(message_id)
+        db.session.commit()
 
 
 ##############################################################################

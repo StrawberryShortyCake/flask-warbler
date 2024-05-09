@@ -111,7 +111,7 @@ False if it can't find a user
 
 -----------------------------------------------------------
 
-18. Like feature -  model and / or relations
+18. DONE: Like feature -  model and / or relations
     - DONE: implement likes relations similar following / followers
     - DONE: Add a model for likes with 2 foreign keys (like in Bernie's Bikes)
     - DONE: Add relations
@@ -126,7 +126,7 @@ False if it can't find a user
     - DONE: add a method for list of likes OR total likes in number (or use jinja length)
 
 19. Like feature - BE
-    - Backend route that would a user to a message for likes (check not yours)
+    - Backend route that would connect a user to a message for likes (check not yours)
 
 20. Like feature on user details - FE / Template
     - UI for a user to indicate liking a message (of others)

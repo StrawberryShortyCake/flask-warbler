@@ -290,31 +290,31 @@ class User(db.Model):
     ############################################################################
     # Like
 
-    def like(self, message):
+    def like(self, message_id):
         """ Like a message by a user """
 
         like = Like(
-            message_id=message.id,
+            message_id=message_id,
             user_id=self.id,
         )
         db.session.add(like)
 
-    def unlike(self, message):
+    def unlike(self, message_id):
         """ Unlike a message by a user """
 
         q = (db
              .delete(Like)
              .filter_by(
-                message_id=message.id,
-                user_id=self.id,)
+                 message_id=message_id,
+                 user_id=self.id,)
              )
         dbx(q)
 
-    def is_liked(cls, message_id):
+    def is_liked(self, message_id):
         """ Does user like this message? """
 
         found_likes = [
-            like for like in cls.likes if like.id == message_id]
+            like for like in self.likes if like.id == message_id]
         return len(found_likes) == 1
 
 
