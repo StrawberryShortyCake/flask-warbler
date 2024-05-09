@@ -255,19 +255,23 @@ def profile_update():
         )
 
         if is_auth:
-            # Set global user variable properties to user input, if available
-            g.user.email = form.email.data
-            g.user.username = form.username.data
-            g.user.image_url = form.image_url.data or DEFAULT_IMAGE_URL
-            g.user.header_image_url = form.header_image_url.data or DEFAULT_HEADER_IMAGE_URL
-            g.user.bio = form.bio.data
-            g.user.location = form.location.data
 
             try:
+                # Set global user variable properties to user input, if available
+                user = db.get_or_404(User, g.user.id)
+
+                user.email = form.email.data
+                user.username = form.username.data
+                user.image_url = form.image_url.data or DEFAULT_IMAGE_URL
+                user.header_image_url = form.header_image_url.data or DEFAULT_HEADER_IMAGE_URL
+                user.bio = form.bio.data
+                user.location = form.location.data
+
                 db.session.commit()
                 flash("Editted your account successfully.", "success")
             except IntegrityError:
-                flash("Must have a valid username and email.")
+                flash("User email / username already taken", "danger")
+                db.session.rollback()
                 return render_template(
                     "/users/edit.jinja",
                     user=g.user,
