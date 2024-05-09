@@ -281,8 +281,8 @@ def profile_update():
 
     return render_template(
         "/users/edit.jinja",
-        user=g.user,
-        form=form)
+        form=form,
+    )
 
 
 @app.post('/users/delete')
