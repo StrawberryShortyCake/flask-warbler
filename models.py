@@ -187,6 +187,24 @@ class User(db.Model):
 
         return False
 
+    @classmethod
+    def is_username_taken(cls, username):
+        """ Checks if the username exists in the database already. """
+
+        q = db.select(User).where(User.username == username)
+        user = dbx(q).first()
+
+        return bool(user)
+
+    @classmethod
+    def is_email_taken(cls, email):
+        """ Checks if the email exists in the database already. """
+
+        q = db.select(User).where(User.email == email)
+        user = dbx(q).first()
+
+        return bool(user)
+
     def follow(self, other_user):
         """Follow another user."""
 

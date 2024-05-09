@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, TextAreaField
-from wtforms.validators import InputRequired, Email, Length, URL, Optional
+from wtforms.validators import InputRequired, Email, Length, URL, Optional, ValidationError
+
+from models import User
 
 
 class MessageForm(FlaskForm):
@@ -31,6 +33,18 @@ class UserAddForm(FlaskForm):
         '(Optional) Image URL',
         validators=[Optional(), URL(), Length(max=255)]
     )
+
+    def validate_username(self, username_field):
+        """ Validation to check if username is already taken. """
+
+        if User.is_username_taken(username_field.data):
+            raise ValidationError('Username is already taken.')
+
+    def validate_email(self, email_field):
+        """ Validation to check if email is already taken. """
+
+        if User.is_email_taken(email_field.data):
+            raise ValidationError('Email is already registered.')
 
 
 class UserUpdateForm(FlaskForm):
