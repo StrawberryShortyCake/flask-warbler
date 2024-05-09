@@ -287,6 +287,36 @@ class User(db.Model):
             user for user in self.following if user == other_user]
         return len(found_user_list) == 1
 
+    ############################################################################
+    # Like
+
+    def like(self, message):
+        """ Like a message by a user """
+
+        like = Like(
+            message_id=message.id,
+            user_id=self.id,
+        )
+        db.session.add(like)
+
+    def unlike(self, message):
+        """ Unlike a message by a user """
+
+        q = (db
+             .delete(Like)
+             .filter_by(
+                message_id=message.id,
+                user_id=self.id,)
+             )
+        dbx(q)
+
+    def is_liked(cls, message_id):
+        """ Does user like this message? """
+
+        found_likes = [
+            like for like in cls.likes if like.id == message_id]
+        return len(found_likes) == 1
+
 
 class Message(db.Model):
     """An individual message ("warble")."""
