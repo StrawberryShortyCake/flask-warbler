@@ -109,6 +109,47 @@ False if it can't find a user
     - Is this in the form?
 
 
+-----------------------------------------------------------
+
+18. Like feature -  model and / or relations
+    - DONE: implement likes relations similar following / followers
+    - DONE: Add a model for likes with 2 foreign keys (like in Bernie's Bikes)
+    - DONE: Add relations
+
+        USER > < MESSAGES
+
+        USER1 = MESSAGE1
+        USER1 = MESSAGE2
+        USER2 = MESSAGE1
+        USER2 = MESSAGE3
+
+    - DONE: add a method for list of likes OR total likes in number (or use jinja length)
+
+19. Like feature - BE
+    - Backend route that would a user to a message for likes (check not yours)
+
+20. Like feature on user details - FE / Template
+    - UI for a user to indicate liking a message (of others)
+    - Use jinja.include command to possibly extract out the message card to add like button
+        - add icon image
+        - make sure the anchor tag is nested at the same level as username
+    - UX for changing like UI styling based on user action
+    - on line 51 in users/details.jinja, populate message count
+        <li class="stat">
+            <p class="small">Likes</p>
+            <h4>TBD</h4>
+        </li>
+
+        - similar approach to {{ user.followers | length }} in html
+        - This message count is interactive and should make a GET request to messages (user)
+
+21. Like feature on liked messages page
+    - The messages page
+        - Take the user instance and find the liked messages to surface
+
+
+
+
 ## Questions
 - Why not an email field for our signup form?
 - How do we get more details from our Integrity Error? we want to see "username" vs "email"

@@ -59,6 +59,42 @@ class Follow(db.Model):
     )
 
 
+class Like(db.Model):
+    """Connection of a user <-> a message."""
+
+    __tablename__ = 'likes'
+
+    __table_args__ = (
+        db.UniqueConstraint("user_id", "message_id"),
+    )
+
+    user_id = db.mapped_column(
+        db.Integer,
+        db.ForeignKey('users.id', ondelete="cascade"),
+        primary_key=True,
+        nullable=False,
+    )
+
+    message_id = db.mapped_column(
+        db.Integer,
+        db.ForeignKey('messages.id', ondelete="cascade"),
+        primary_key=True,
+        nullable=False,
+    )
+
+    user_liking_the_message = db.relationship(
+        "User",
+        foreign_keys=[user_id],
+        back_populates="liked_messages",
+    )
+
+    message_the_user_liked = db.relationship(
+        "Message",
+        foreign_keys=[message_id],
+        back_populates="users_who_liked",
+    )
+
+
 class User(db.Model):
     """User in the system."""
 
@@ -133,6 +169,18 @@ class User(db.Model):
         cascade="all, delete-orphan",
     )
 
+    # All the messages liked by the User.
+    liked_messages = db.relationship(
+        "Like",
+        foreign_keys=[Like.user_id],
+        back_populates="user_liking_the_message",
+    )
+
+    @property
+    def likes(self):
+        """ Return a list of every message the User liked """
+        return [like.message_the_user_liked for like in self.liked_messages]
+
     @property
     def following(self):
         """ Return a list of everyone the User follows """
@@ -191,7 +239,7 @@ class User(db.Model):
     def is_username_taken(cls, username):
         """ Checks if the username exists in the database already. """
 
-        q = db.select(User).where(User.username == username)
+        q = db.select(User.id).where(User.username == username)
         user = dbx(q).first()
 
         return bool(user)
@@ -200,7 +248,7 @@ class User(db.Model):
     def is_email_taken(cls, email):
         """ Checks if the email exists in the database already. """
 
-        q = db.select(User).where(User.email == email)
+        q = db.select(User.id).where(User.email == email)
         user = dbx(q).first()
 
         return bool(user)
@@ -218,11 +266,11 @@ class User(db.Model):
         """Stop following another user."""
 
         q = (db
-            .delete(Follow)
-            .filter_by(
-                user_being_followed_id=other_user.id,
-                user_following_id=self.id)
-        )
+             .delete(Follow)
+             .filter_by(
+                 user_being_followed_id=other_user.id,
+                 user_following_id=self.id)
+             )
         dbx(q)
 
     def is_followed_by(self, other_user):
@@ -271,4 +319,10 @@ class Message(db.Model):
     user = db.relationship(
         "User",
         back_populates="messages",
+    )
+
+    users_who_liked = db.relationship(
+        "Like",
+        foreign_keys=[Like.message_id],
+        back_populates="message_the_user_liked",
     )
