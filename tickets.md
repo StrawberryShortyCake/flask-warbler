@@ -119,6 +119,8 @@ False if it can't find a user
 
 - add UI for showing /users
 
+- add nav collapse
+
 
 
 
