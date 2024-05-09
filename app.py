@@ -88,6 +88,7 @@ def signup():
 
         except IntegrityError:
             flash("Username already taken", 'danger')
+            db.session.rollback()
             return render_template('users/signup.jinja', form=form)
 
         do_login(user)
@@ -250,7 +251,7 @@ def profile_update():
     if form.validate_on_submit():
 
         is_auth = User.authenticate(
-            username=form.username.data,
+            username=g.user.username,
             password=form.password.data
         )
 
@@ -409,6 +410,7 @@ def add_header(response):
     response.cache_control.no_store = True
 
     return response
+
 
 @app.errorhandler(404)
 def page_not_found(e):

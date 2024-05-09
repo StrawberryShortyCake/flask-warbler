@@ -105,7 +105,7 @@ False if it can't find a user
 16. DONE: Fix homepage()
     The homepage for logged-in-users should show the last 100 warbles only from the users that the logged-in user is following, and that user, rather than warbles from all users.
 
-17. the correct password isn't working during our edit of profile
+17. DONE: the correct password isn't working during our edit of profile
     - Is this in the form?
 
 
@@ -113,6 +113,8 @@ False if it can't find a user
 - Why not an email field for our signup form?
 - How do we get more details from our Integrity Error? we want to see "username" vs "email"
 - How do we get the header image working correctly?
+- Why did we use `User.image_url.default.arg` instead of importing a global variable like DEFAULT_IMAGE_URL (line 90 on app.py)
+- db.session.rollback() - exactly how does a bad transaction manifest step by step?
 
 ## Further Studies
 - Add labels to all forms
