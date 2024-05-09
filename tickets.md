@@ -105,6 +105,9 @@ False if it can't find a user
 16. DONE: Fix homepage()
     The homepage for logged-in-users should show the last 100 warbles only from the users that the logged-in user is following, and that user, rather than warbles from all users.
 
+17. the correct password isn't working during our edit of profile
+    - Is this in the form?
+
 
 ## Questions
 - Why not an email field for our signup form?
