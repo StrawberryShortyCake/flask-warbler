@@ -405,3 +405,8 @@ def add_header(response):
     response.cache_control.no_store = True
 
     return response
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # Render the custom 404 template
+    return (render_template('error_404.jinja'), 404)
