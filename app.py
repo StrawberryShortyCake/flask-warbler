@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from werkzeug.exceptions import Unauthorized
 
 from forms import UserAddForm, UserUpdateForm, LoginForm, MessageForm, CsrfForm
-from models import db, dbx, User, Message, DEFAULT_HEADER_IMAGE_URL, DEFAULT_IMAGE_URL
+from models import db, dbx, User, Message, Like, DEFAULT_HEADER_IMAGE_URL, DEFAULT_IMAGE_URL
 
 load_dotenv()
 
