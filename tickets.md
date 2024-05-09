@@ -121,6 +121,15 @@ False if it can't find a user
 
 - add nav collapse
 
+- Add active nav
+``` html
+<li class="nav-item">
+          <a class="nav-link active " href="#">Home
+            <span class="visually-hidden">(current)</span>
+          </a>
+        </li>
+```
+
 
 
 
