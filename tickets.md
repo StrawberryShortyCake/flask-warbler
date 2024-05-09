@@ -110,6 +110,7 @@ False if it can't find a user
 - Why not an email field for our signup form?
 - How do we get more details from our Integrity Error? we want to see "username" vs "email"
 - How would we prepopulate the edit page?
+- How do we get the header image working correctly?
 
 ## Further Studies
 - Add labels to all forms
