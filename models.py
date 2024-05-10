@@ -147,6 +147,9 @@ class User(db.Model):
         nullable=False,
     )
 
+    ############################################################################
+    # Relationships
+
     messages = db.relationship(
         "Message",
         back_populates="user",
@@ -176,6 +179,10 @@ class User(db.Model):
         back_populates="user_liking_the_message",
     )
 
+    ############################################################################
+    # Lists of Relationships
+
+
     @property
     def likes(self):
         """ Return a list of every message the User liked """
@@ -193,6 +200,10 @@ class User(db.Model):
 
     def __repr__(self):
         return f"<User #{self.id}: {self.username}, {self.email}>"
+
+    ############################################################################
+    # Class Methods
+
 
     @classmethod
     def signup(cls, username, email, password, image_url=DEFAULT_IMAGE_URL):
@@ -252,6 +263,9 @@ class User(db.Model):
         user = dbx(q).first()
 
         return bool(user)
+
+    ############################################################################
+    # Follows
 
     def follow(self, other_user):
         """Follow another user."""
