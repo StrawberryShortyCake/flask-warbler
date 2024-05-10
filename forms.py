@@ -77,7 +77,7 @@ class UserUpdateForm(FlaskForm):
         validators=[Optional(), Length(max=30)]
     )
 
-    bio = StringField(  # FIXME: textareafield
+    bio = TextAreaField(
         '(Optional) Bio',
         validators=[Optional()]
     )
