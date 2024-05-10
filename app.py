@@ -454,6 +454,31 @@ def toggle_like(message_id):
         return redirect(redirection_url)
 
 
+@app.get('/users/<int:user_id>/likes')
+@login_required
+def show_likes(user_id):
+    """ Show all liked messages from user """
+
+    user = db.get_or_404(User, user_id)
+
+    liked_message_ids = [
+        liked_msgs.id for liked_msgs in user.likes]
+    # Add current user to the liked message list
+
+    q = (
+        db.select(Message)
+        .where(Message.id.in_(liked_message_ids))
+        .order_by(Message.timestamp.desc())
+    )
+    liked_msgs = dbx(q).scalars().all()
+
+    return render_template(
+        'users/likes.jinja',
+        messages=liked_msgs,
+        user=user,
+    )
+
+
 ##############################################################################
 # Homepage and error pages
 
