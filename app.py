@@ -293,10 +293,10 @@ def profile_update():
 
     if form.validate_on_submit():
 
-        is_auth = User.authenticate(  # FIXME: improve naming b/c it's not a boolean output OR make it a boolean output
+        is_auth = bool(User.authenticate(
             username=g.user.username,
             password=form.password.data
-        )
+        ))
 
         if is_auth:
 
