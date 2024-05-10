@@ -64,11 +64,6 @@ class Like(db.Model):
 
     __tablename__ = 'likes'
 
-    __table_args__ = (
-        # TODO: do not need this. it's unique when it's composites
-        db.UniqueConstraint("user_id", "message_id"),
-    )
-
     user_id = db.mapped_column(
         db.Integer,
         db.ForeignKey('users.id', ondelete="cascade"),
