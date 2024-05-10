@@ -65,6 +65,7 @@ class Like(db.Model):
     __tablename__ = 'likes'
 
     __table_args__ = (
+        # TODO: do not need this. it's unique when it's composites
         db.UniqueConstraint("user_id", "message_id"),
     )
 
@@ -84,14 +85,16 @@ class Like(db.Model):
 
     user_liking_the_message = db.relationship(
         "User",
+        # TODO: this is not needed, because we already specified and SQLalchemy know what to join on
         foreign_keys=[user_id],
+        # TODO: rename because it's not technically messages, it's instances of likes
         back_populates="liked_messages",
     )
 
     message_the_user_liked = db.relationship(
         "Message",
         foreign_keys=[message_id],
-        back_populates="users_who_liked",
+        back_populates="users_who_liked",  # TODO: rename because it's still likes
     )
 
 
@@ -173,8 +176,9 @@ class User(db.Model):
     )
 
     # All the messages liked by the User.
-    liked_messages = db.relationship(
+    liked_messages = db.relationship(  # TODO: rename this
         "Like",
+        # TODO: take this out because there's only one relationship; call it out if it's unexpected
         foreign_keys=[Like.user_id],
         back_populates="user_liking_the_message",
     )
@@ -182,11 +186,10 @@ class User(db.Model):
     ############################################################################
     # Lists of Relationships
 
-
     @property
-    def likes(self):
+    def likes(self):  # : TODO: rename, this is now the liked_messages
         """ Return a list of every message the User liked """
-        return [like.message_the_user_liked for like in self.liked_messages]
+        return [like.message_the_user_liked for like in self.liked_messages]  # : TODO: change name
 
     @property
     def following(self):
@@ -203,7 +206,6 @@ class User(db.Model):
 
     ############################################################################
     # Class Methods
-
 
     @classmethod
     def signup(cls, username, email, password, image_url=DEFAULT_IMAGE_URL):
