@@ -314,7 +314,8 @@ class User(db.Model):
         """ Does user like this message? """
 
         found_likes = [
-            like for like in self.likes if like.id == message_id]
+            liked_msg for liked_msg in self.likes if liked_msg.id == message_id]
+
         return len(found_likes) == 1
 
 
