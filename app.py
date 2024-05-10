@@ -27,7 +27,6 @@ toolbar = DebugToolbarExtension(app)
 db.init_app(app)
 
 
-
 ##############################################################################
 # Before Requests
 
@@ -49,7 +48,6 @@ def add_csrf_to_g():
     g.csrf_form = CsrfForm()
 
 
-
 ##############################################################################
 # Decorator wraps
 
@@ -58,7 +56,6 @@ def login_required(route_function):
     """ Validates that the g.user is logged in,
     redirects to homepage otherwise """
     @wraps(route_function)
-
     def decorated_route(*args, **kwargs):
 
         if not g.user:
@@ -68,10 +65,10 @@ def login_required(route_function):
 
     return decorated_route
 
+
 def csrf_protected(route_function):
     """ Protects a route for CSRF """
     @wraps(route_function)
-
     def decorated_route(*args, **kwargs):
         form = g.csrf_form
 
@@ -185,7 +182,7 @@ def list_users():
     Can take a 'q' param in querystring to search by that username.
     """
 
-    #if not g.user:
+    # if not g.user:
     #    flash("Access unauthorized.", "danger")
     #    return redirect("/")
 
@@ -207,7 +204,7 @@ def list_users():
 def show_user(user_id):
     """Show user profile."""
 
-    #if not g.user:
+    # if not g.user:
     #    flash("Access unauthorized.", "danger")
     #    return redirect("/")
 
@@ -221,7 +218,7 @@ def show_user(user_id):
 def show_following(user_id):
     """Show list of people this user is following."""
 
-    #if not g.user:
+    # if not g.user:
     #    flash("Access unauthorized.", "danger")
     #    return redirect("/")
 
@@ -234,7 +231,7 @@ def show_following(user_id):
 def show_followers(user_id):
     """Show list of followers of this user."""
 
-    #if not g.user:
+    # if not g.user:
     #    flash("Access unauthorized.", "danger")
     #    return redirect("/")
 
@@ -250,7 +247,7 @@ def start_following(follow_id):
     Redirect to following page for the current for the current user.
     """
 
-    #if not g.user:
+    # if not g.user:
     #    flash("Access unauthorized.", "danger")
     #    return redirect("/")
 
@@ -287,7 +284,7 @@ def stop_following(follow_id):
 def profile_update():
     """Update profile for current user."""
 
-    #if not g.user:
+    # if not g.user:
     #    flash("Access unauthorized.", "danger")
     #    return redirect("/")
 
@@ -345,7 +342,7 @@ def delete_user():
     Redirect to signup page.
     """
 
-    #if not g.user:
+    # if not g.user:
     #    flash("Access unauthorized.", "danger")
     #    return redirect("/")
 
@@ -369,7 +366,7 @@ def add_message():
     Show form if GET. If valid, update message and redirect to user page.
     """
 
-    #if not g.user:
+    # if not g.user:
     #    flash("Access unauthorized.", "danger")
     #    return redirect("/")
 
@@ -390,7 +387,7 @@ def add_message():
 def show_message(message_id):
     """Show a message."""
 
-    #if not g.user:
+    # if not g.user:
     #    flash("Access unauthorized.", "danger")
     #    return redirect("/")
 
@@ -407,7 +404,7 @@ def delete_message(message_id):
     Redirect to user page on success.
     """
 
-    #if not g.user:
+    # if not g.user:
     #    flash("Access unauthorized.", "danger")
     #    return redirect("/")
 
@@ -430,9 +427,9 @@ def toggle_like(message_id):
     render the appropriate jinja
     """
 
-    #form = CsrfForm()
+    # form = CsrfForm()
 
-    #if not g.user or not form.validate_on_submit():
+    # if not g.user or not form.validate_on_submit():
     #    flash("Access unauthorized.", "danger")
     #    return redirect("/")
 
@@ -452,6 +449,8 @@ def toggle_like(message_id):
         db.session.commit()
 
         return redirect(redirection_url)
+    # FIXME: extract the dupes for the outside scope
+    # FIXME: we have layer of protetion from liking your own on the UI, need another layer of protection in this route for safety
 
 
 @app.get('/users/<int:user_id>/likes')
@@ -462,7 +461,7 @@ def show_likes(user_id):
     user = db.get_or_404(User, user_id)
 
     liked_message_ids = [
-        liked_msgs.id for liked_msgs in user.likes]
+        liked_msgs.id for liked_msgs in user.likes]  # FIXME: we already can call the method in jinja
     # Add current user to the liked message list
 
     q = (
@@ -474,7 +473,7 @@ def show_likes(user_id):
 
     return render_template(
         'users/likes.jinja',
-        messages=liked_msgs,
+        messages=liked_msgs,  # FIXME: leverage jinja to query user.likes instead of passing it in
         user=user,
     )
 
