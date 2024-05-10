@@ -147,6 +147,11 @@ False if it can't find a user
     - The messages page
         - Take the user instance and find the liked messages to surface
 
+22. Test for invalid email
+
+23. Test for invalid username
+
+
 
 
 
@@ -156,6 +161,18 @@ False if it can't find a user
 - How do we get the header image working correctly?
 - Why did we use `User.image_url.default.arg` instead of importing a global variable like DEFAULT_IMAGE_URL (line 90 on app.py)
 - db.session.rollback() - exactly how does a bad transaction manifest step by step?
+
+- How do we format correctly? Use paranthesis!
+- How do I import and format a bunch of imports?
+- How do I add a hidden field in the form Model?
+- How do we redirect to a certain point on a page?
+- Is there a good way to get the collapse profile pic working?
+
+Side notes:
+- request.referer
+    - Unsupported in most places because it is a security risk.
+
+
 
 ## Further Studies
 - Add labels to all forms
