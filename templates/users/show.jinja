@@ -21,6 +21,26 @@
             </span>
         <p>{{ message.text }}</p>
       </div>
+
+      <a>
+        <form>
+            {{ g.csrf_form.hidden_tag() }}
+
+            <input type="hidden" name="came_from" value="/users/{{ user.id }}">
+            <button class="btn btn-sm"
+              formaction="/messages/like/{{ message.id }}"
+              formmethod="POST">
+
+            {% if g.user.is_liked(message.id) %}
+              <span class="bi bi-suit-heart-fill"></span>
+            {% else%}
+              <span class="bi bi-suit-heart"></span>
+            {% endif%}
+
+            </button>
+        </form>
+      </a>
+
     </li>
 
     {% endfor %}
