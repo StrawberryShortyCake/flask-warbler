@@ -28,6 +28,8 @@ db.init_app(app)
 
 
 
+##############################################################################
+# Before Requests
 
 @app.before_request
 def add_user_to_g():
