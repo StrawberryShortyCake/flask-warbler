@@ -29,8 +29,8 @@
             </li>
         {% else %}
             <li class="nav-item">
-                <a class="navbar-brand" href="/users/{{ g.user.id }}">
-                    <img src="{{ g.user.image_url }}" alt="{{ g.user.username }}" >
+                <a class="nav-link" href="/users/{{ g.user.id }}">
+                    <img class="img-fluid" src="{{ g.user.image_url }}" alt="{{ g.user.username }}" >
                 </a>
             </li>
             <li class="nav-item">
@@ -60,6 +60,7 @@
       {% block searchbox %}
 
         <form class="d-flex" action="/users">
+            {# Try playing around with the bootstrap width and not allow it to take in all the cols #}
             <input class="form-control me-sm-2"
                 name="q"
                 class="form-control"
@@ -68,8 +69,10 @@
                 id="search">
 
             <button class="btn btn-default my-2 my-sm-0">
-                <span class="bi bi-search"></span> {# BS: Why isnt this icon appearing inside the search bar? #}
+
             </button>
+
+            <span class="bi bi-search"></span> {# BS: Why isnt this icon appearing inside the search bar? #}
         </form>
       {% endblock %}
     </div>
