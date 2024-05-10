@@ -40,14 +40,14 @@ class UserModelTestCase(TestCase):
     def tearDown(self):
         db.session.rollback()
 
-    def test_user_model(self):
+    def test_user_model_(self):
         u1 = db.session.get(User, self.u1_id)
 
         # User should have no messages & no followers
         self.assertEqual(len(u1.messages), 0)
         self.assertEqual(len(u1.followers), 0)
 
-    def is_following(self):
+    def test_is_following(self):
 
         user1_id = self.u1_id
         user2_id = self.u2_id
@@ -62,6 +62,42 @@ class UserModelTestCase(TestCase):
 
         db.session.commit()
 
-        self.assertIn(user2, user1.followers)
-        self.assertIn(user1, user2.following)
-        self.assertEqual("Hello", 2)
+        self.assertIn(user1, user2.followers)
+        self.assertIn(user2, user1.following)
+
+    def test_is_unfollowing(self):
+
+        user1_id = self.u1_id
+        user2_id = self.u2_id
+
+        user1 = db.session.get(User, user1_id)
+        user2 = db.session.get(User, user2_id)
+
+        user1.follow(user2)
+
+        db.session.commit()
+
+        self.assertIn(user1, user2.followers)
+        self.assertIn(user2, user1.following)
+
+        user1.unfollow(user2)
+
+        db.session.commit()
+
+        self.assertNotIn(user1, user2.followers)
+        self.assertNotIn(user2, user1.following)
+
+
+# Does User.signup successfully create a new user given valid credentials?
+# Does User.signup fail to create a new user if any of the validations(eg uniqueness, non-nullable fields) fail?
+
+
+    def test_signup(self):
+
+        u3 = User.signup("user3", "user3@gmail.com", "password3")
+        db.session.commit()
+
+        self.assertEqual(u3.username, "user3")
+        self.assertEqual(u3.email, "user3@gmail.com")
+        self.assertNotEqual(u3.password, "password3")
+        # TODO: ask how to test hashed_pwd

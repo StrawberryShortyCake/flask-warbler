@@ -170,6 +170,7 @@ False if it can't find a user
  - html
 - Is there a good way to get the collapse profile pic working?
 - what is **kargs and *args
+- How would we know that that the hashed_pw is right?
 
 Side notes:
 - request.referer
