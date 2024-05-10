@@ -383,24 +383,24 @@ def toggle_like(message_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
+    redirection_url = request.form.get(
+            "came_from", "/")
+
+    # Validate on submit
+
     # Will return true if the message is liked; false otherwise
-    if g.user.is_liked(message_id):
+    if not g.user.is_liked(message_id):
 
-        redirection_url = request.form.get(
-            "came_from", "/")  # FIXME: add to jinja property in the hidden (like csrf)
-
-        g.user.like(
-            message_id=message_id,
-            user_id=g.user.id
-        )
+        g.user.like(message_id=message_id)
 
         db.session.commit()
         return redirect(redirection_url)
 
     else:
-
         g.user.unlike(message_id)
         db.session.commit()
+
+        return redirect(redirection_url)
 
 
 ##############################################################################
