@@ -65,25 +65,27 @@
               <span class="text-muted">{{ msg.timestamp.strftime('%d %B %Y') }}</span>
               <p>{{ msg.text }}</p>
             </div>
-            <a>
-              <form>
-                {{ g.csrf_form.hidden_tag() }}
 
-                <input type="hidden" name="came_from" value="/">
-                <button class="btn btn-sm"
-                  formaction="/messages/like/{{ msg.id }}"
-                  formmethod="POST">
+            {% if g.user.username != msg.user.username %}
+              <a>
+                <form>
+                  {{ g.csrf_form.hidden_tag() }}
 
-                {% if g.user.is_liked(msg.id) %}
-                  <span class="bi bi-suit-heart-fill"></span>
-                {% else%}
-                  <span class="bi bi-suit-heart"></span>
-                {% endif%}
+                  <input type="hidden" name="came_from" value="/">
+                  <button class="btn btn-sm"
+                    formaction="/messages/like/{{ msg.id }}"
+                    formmethod="POST">
 
-                </button>
-              </form>
-            </a>
+                  {% if g.user.is_liked(msg.id) %}
+                    <span class="bi bi-suit-heart-fill"></span>
+                  {% else%}
+                    <span class="bi bi-suit-heart"></span>
+                  {% endif%}
 
+                  </button>
+                </form>
+              </a>
+            {% endif%}
           </li>
         {% endfor %}
       </ul>
