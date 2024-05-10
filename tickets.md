@@ -165,7 +165,9 @@ False if it can't find a user
 - How do we format correctly? Use paranthesis!
 - How do I import and format a bunch of imports?
 - How do I add a hidden field in the form Model?
+ - docs
 - How do we redirect to a certain point on a page?
+ - html
 - Is there a good way to get the collapse profile pic working?
 - what is **kargs and *args
 
