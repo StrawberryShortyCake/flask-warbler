@@ -91,7 +91,6 @@ class UserModelTestCase(TestCase):
 # Does User.signup successfully create a new user given valid credentials?
 # Does User.signup fail to create a new user if any of the validations(eg uniqueness, non-nullable fields) fail?
 
-
     def test_signup(self):
 
         u3 = User.signup("user3", "user3@gmail.com", "password3")
@@ -101,3 +100,6 @@ class UserModelTestCase(TestCase):
         self.assertEqual(u3.email, "user3@gmail.com")
         self.assertNotEqual(u3.password, "password3")
         # TODO: ask how to test hashed_pwd
+
+
+# NEXT: DO A FAILED SIGNUP
