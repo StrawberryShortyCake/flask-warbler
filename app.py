@@ -436,30 +436,26 @@ def toggle_like(message_id):
     render the appropriate jinja
     """
 
-    # form = CsrfForm()
-
-    # if not g.user or not form.validate_on_submit():
-    #    flash("Access unauthorized.", "danger")
-    #    return redirect("/")
-
     redirection_url = request.form.get(
         "came_from", "/")
+
+    msg = db.get_or_404(Message, message_id)
+
+    # Cannot like your own message
+    if g.user.username == msg.user.username:
+
+        return redirect(redirection_url)
 
     # Will return true if the message is liked; false otherwise
     if not g.user.is_liked(message_id):
 
         g.user.like(message_id=message_id)
 
-        db.session.commit()
-        return redirect(redirection_url)
-
     else:
         g.user.unlike(message_id)
-        db.session.commit()
 
-        return redirect(redirection_url)
-    # FIXME: extract the dupes for the outside scope
-    # FIXME: we have layer of protetion from liking your own on the UI, need another layer of protection in this route for safety
+    db.session.commit()
+    return redirect(redirection_url)
 
 
 @app.get('/users/<int:user_id>/likes')
@@ -469,20 +465,9 @@ def show_likes(user_id):
 
     user = db.get_or_404(User, user_id)
 
-    liked_message_ids = [
-        liked_msgs.id for liked_msgs in user.likes]  # FIXME: we already can call the method in jinja
-    # Add current user to the liked message list
-
-    q = (
-        db.select(Message)
-        .where(Message.id.in_(liked_message_ids))
-        .order_by(Message.timestamp.desc())
-    )
-    liked_msgs = dbx(q).scalars().all()
-
     return render_template(
         'users/likes.jinja',
-        messages=liked_msgs,  # FIXME: leverage jinja to query user.likes instead of passing it in
+        messages=user.likes,
         user=user,
     )
 
