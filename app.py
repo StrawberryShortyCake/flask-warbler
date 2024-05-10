@@ -2,6 +2,8 @@ import os
 from dotenv import load_dotenv
 
 from flask import Flask, render_template, request, flash, redirect, session, g
+from flask import url_for
+from functools import wraps
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from werkzeug.exceptions import Unauthorized
@@ -25,8 +27,6 @@ toolbar = DebugToolbarExtension(app)
 db.init_app(app)
 
 
-##############################################################################
-# User signup/login/logout
 
 
 @app.before_request
@@ -45,6 +45,48 @@ def add_csrf_to_g():
     """ Add csrf before a request. """
 
     g.csrf_form = CsrfForm()
+
+
+
+##############################################################################
+# Decorator wraps
+
+# Source: https://flask.palletsprojects.com/en/2.3.x/patterns/viewdecorators/
+def login_required(route_function):
+    """ Validates that the g.user is logged in,
+    redirects to homepage otherwise """
+    @wraps(route_function)
+
+    def decorated_route(*args, **kwargs):
+
+        if not g.user:
+            flash("Access unauthorized.", "danger")
+            return redirect(url_for("homepage"))  # Redirect to home
+        return route_function(*args, **kwargs)
+
+    return decorated_route
+
+def csrf_protected(route_function):
+    """ Protects a route for CSRF """
+    @wraps(route_function)
+
+    def decorated_route(*args, **kwargs):
+        form = g.csrf_form
+
+        # CSRF check
+        if form.validate_on_submit():
+            # If valid, execute route function
+            return route_function(*args, **kwargs)
+
+        else:  # pragma: no cover
+            # didn't pass CSRF; ignore logout attempt
+            raise Unauthorized()
+
+    return decorated_route
+
+
+##############################################################################
+# User signup/login/logout
 
 
 def do_login(user):
@@ -122,33 +164,28 @@ def login():
 
 
 @app.post('/logout')
+@csrf_protected
 def logout():
     """Handle logout of user and redirect to homepage."""
 
-    form = g.csrf_form
-
-    if form.validate_on_submit():  # NOTE: CSRF check, logging out once ok. Multi-logout is allowed, good UX
-        do_logout()
-        return redirect("/login")
-
-    else:  # pragma: no cover
-        # didn't pass CSRF; ignore logout attempt
-        raise Unauthorized()
+    do_logout()
+    return redirect("/login")
 
 
 ##############################################################################
 # General user routes:
 
 @app.get('/users')
+@login_required
 def list_users():
     """Page with listing of users.
 
     Can take a 'q' param in querystring to search by that username.
     """
 
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
+    #if not g.user:
+    #    flash("Access unauthorized.", "danger")
+    #    return redirect("/")
 
     search = request.args.get('q')
 
@@ -164,12 +201,13 @@ def list_users():
 
 
 @app.get('/users/<int:user_id>')
+@login_required
 def show_user(user_id):
     """Show user profile."""
 
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
+    #if not g.user:
+    #    flash("Access unauthorized.", "danger")
+    #    return redirect("/")
 
     user = db.get_or_404(User, user_id)
 
@@ -177,39 +215,42 @@ def show_user(user_id):
 
 
 @app.get('/users/<int:user_id>/following')
+@login_required
 def show_following(user_id):
     """Show list of people this user is following."""
 
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
+    #if not g.user:
+    #    flash("Access unauthorized.", "danger")
+    #    return redirect("/")
 
     user = db.get_or_404(User, user_id)
     return render_template('users/following.jinja', user=user)
 
 
 @app.get('/users/<int:user_id>/followers')
+@login_required
 def show_followers(user_id):
     """Show list of followers of this user."""
 
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
+    #if not g.user:
+    #    flash("Access unauthorized.", "danger")
+    #    return redirect("/")
 
     user = db.get_or_404(User, user_id)
     return render_template('users/followers.jinja', user=user)
 
 
 @app.post('/users/follow/<int:follow_id>')
+@login_required
 def start_following(follow_id):
     """Add a follow for the currently-logged-in user.
 
     Redirect to following page for the current for the current user.
     """
 
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
+    #if not g.user:
+    #    flash("Access unauthorized.", "danger")
+    #    return redirect("/")
 
     followed_user = db.get_or_404(User, follow_id)
 
@@ -220,15 +261,16 @@ def start_following(follow_id):
 
 
 @app.post('/users/stop-following/<int:follow_id>')
+@login_required
 def stop_following(follow_id):
     """Have currently-logged-in-user stop following this user.
 
     Redirect to following page for the current for the current user.
     """
 
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
+    # if not g.user:
+    #     flash("Access unauthorized.", "danger")
+    #     return redirect("/")
 
     followed_user = db.get_or_404(User, follow_id)
 
@@ -239,12 +281,13 @@ def stop_following(follow_id):
 
 
 @app.route('/users/profile', methods=["GET", "POST"])
+@login_required
 def profile_update():
     """Update profile for current user."""
 
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
+    #if not g.user:
+    #    flash("Access unauthorized.", "danger")
+    #    return redirect("/")
 
     form = UserUpdateForm(obj=g.user)  # FIXME: move it under security check
 
@@ -293,15 +336,16 @@ def profile_update():
 
 
 @app.post('/users/delete')
+@login_required
 def delete_user():
     """Delete user.
 
     Redirect to signup page.
     """
 
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
+    #if not g.user:
+    #    flash("Access unauthorized.", "danger")
+    #    return redirect("/")
 
     do_logout()
 
@@ -316,15 +360,16 @@ def delete_user():
 # Messages routes:
 
 @app.route('/messages/new', methods=["GET", "POST"])
+@login_required
 def add_message():
     """Add a message:
 
     Show form if GET. If valid, update message and redirect to user page.
     """
 
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
+    #if not g.user:
+    #    flash("Access unauthorized.", "danger")
+    #    return redirect("/")
 
     form = MessageForm()
 
@@ -339,18 +384,20 @@ def add_message():
 
 
 @app.get('/messages/<int:message_id>')
+@login_required
 def show_message(message_id):
     """Show a message."""
 
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
+    #if not g.user:
+    #    flash("Access unauthorized.", "danger")
+    #    return redirect("/")
 
     msg = db.get_or_404(Message, message_id)
     return render_template('messages/show.jinja', message=msg)
 
 
 @app.post('/messages/<int:message_id>/delete')
+@login_required
 def delete_message(message_id):
     """Delete a message.
 
@@ -358,9 +405,9 @@ def delete_message(message_id):
     Redirect to user page on success.
     """
 
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
+    #if not g.user:
+    #    flash("Access unauthorized.", "danger")
+    #    return redirect("/")
 
     msg = db.get_or_404(Message, message_id)
     db.session.delete(msg)
@@ -373,17 +420,19 @@ def delete_message(message_id):
 # Likes
 
 @app.post('/messages/like/<int:message_id>')
+@login_required
+@csrf_protected
 def toggle_like(message_id):
     """ Will call is_liked method from the User model. Depending on
     the output, will either call the liked or the unlike method and then
     render the appropriate jinja
     """
 
-    form = CsrfForm()
+    #form = CsrfForm()
 
-    if not g.user or not form.validate_on_submit():
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
+    #if not g.user or not form.validate_on_submit():
+    #    flash("Access unauthorized.", "danger")
+    #    return redirect("/")
 
     redirection_url = request.form.get(
         "came_from", "/")
@@ -450,5 +499,5 @@ def add_header(response):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    # Render the custom 404 template
+    """ Render the 404 page """
     return (render_template('error_404.jinja'), 404)
