@@ -242,11 +242,11 @@ def stop_following(follow_id):
 def profile_update():
     """Update profile for current user."""
 
-    form = UserUpdateForm(obj=g.user)  # FIXME: move it under security check
-
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
+
+    form = UserUpdateForm(obj=g.user)  # FIXME: move it under security check
 
     if form.validate_on_submit():
 
@@ -379,14 +379,14 @@ def toggle_like(message_id):
     render the appropriate jinja
     """
 
-    if not g.user:
+    form = CsrfForm()
+
+    if not g.user or not form.validate_on_submit():
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
     redirection_url = request.form.get(
-            "came_from", "/")
-
-    # Validate on submit
+        "came_from", "/")
 
     # Will return true if the message is liked; false otherwise
     if not g.user.is_liked(message_id):
